@@ -1,0 +1,38 @@
+export declare const FormatCodeType: {
+    readonly MessageHeader: 112;
+    readonly MessageAnnotations: 114;
+    readonly MessageProperties: 115;
+    readonly ApplicationProperties: 116;
+    readonly ApplicationData: 117;
+    readonly AmqpValue: 119;
+    readonly Size: 3;
+};
+export declare const FormatCode: {
+    readonly Described: 0;
+    readonly Vbin8: 160;
+    readonly Str8: 161;
+    readonly Sym8: 163;
+    readonly Vbin32: 176;
+    readonly Str32: 177;
+    readonly Sym32: 179;
+    readonly List0: 69;
+    readonly List8: 192;
+    readonly List32: 208;
+    readonly Map8: 193;
+    readonly Map32: 209;
+    readonly Null: 64;
+    readonly ULong0: 68;
+    readonly Ubyte: 80;
+    readonly SmallUlong: 83;
+    readonly ULong: 128;
+    readonly Uint: 112;
+    readonly Uint0: 67;
+    readonly Int: 113;
+    readonly SmallUint: 82;
+    readonly SmallInt: 84;
+    readonly Timestamp: 131;
+    readonly Bool: 86;
+    readonly BoolTrue: 65;
+    readonly BoolFalse: 66;
+};
+export declare const PropertySizeDescription: number;
