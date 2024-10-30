@@ -54,7 +54,7 @@ jobs:
       - name: Restart RabbitMQ
         run: docker restart $(docker ps --filter ancestor=rabbitmq:3.13-rc-management -q)
       - name: Wait for rabbit instance restart
-        run: sleep 5 && docker exec $(docker ps --filter ancestor=rabbitmq:3.13-rc-management -q) rabbitmqctl await_startup
+        run: sleep 10 && docker exec $(docker ps --filter ancestor=rabbitmq:3.13-rc-management -q) rabbitmqctl await_startup
       - name: Create SuperStream
         run: docker exec $(docker ps --filter ancestor=rabbitmq:3.13-rc-management -q) rabbitmq-streams add_super_stream super-stream-test --partitions 2
       - run: npm ci
