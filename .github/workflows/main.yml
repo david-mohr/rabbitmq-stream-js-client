@@ -40,7 +40,7 @@ jobs:
     steps:
       - name: Add the rabbitmq service to /etc/hosts
         run: sudo echo "127.0.0.1 test-node" | sudo tee -a /etc/hosts
-      - run: rm -rf tls-gen
+      - run: id && ls -lR tls-gen/basic && rm -rf tls-gen
       - uses: actions/checkout@v3
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
