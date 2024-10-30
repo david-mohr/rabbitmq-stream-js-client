@@ -63,7 +63,7 @@ jobs:
       - run: docker exec $(docker ps --filter ancestor=rabbitmq:3.13-rc-management -q) rabbitmqctl add_user 'O=client,CN=test-node' ''
       - run: docker exec $(docker ps --filter ancestor=rabbitmq:3.13-rc-management -q) rabbitmqctl clear_password 'O=client,CN=test-node'
       - run: docker exec $(docker ps --filter ancestor=rabbitmq:3.13-rc-management -q) rabbitmqctl set_permissions 'O=client,CN=test-node' '.*' '.*' '.*'
-      - run: npm test
+      - run: npx mocha test -g auth
         env:
           RABBITMQ_USER: "test-user"
           RABBITMQ_PASSWORD: "test-password"
