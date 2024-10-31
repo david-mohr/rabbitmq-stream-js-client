@@ -55,6 +55,7 @@ jobs:
           CN: test-node
       - name: Make sure certs are readable by rabbitmq
         run: cp tls-gen/basic/result/* conf/ && sudo chown -R 999:999 conf
+      - run: docker exec $(docker ps --filter ancestor=rabbitmq:3.13-rc-management -q) ls -l /etc/rabbitmq
       - run: docker exec $(docker ps --filter ancestor=rabbitmq:3.13-rc-management -q) ls -l /certs
       - name: Restart RabbitMQ
         run: docker restart $(docker ps --filter ancestor=rabbitmq:3.13-rc-management -q)
