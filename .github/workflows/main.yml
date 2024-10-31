@@ -40,19 +40,21 @@ jobs:
     steps:
       - name: Add the rabbitmq service to /etc/hosts
         run: sudo echo "127.0.0.1 test-node" | sudo tee -a /etc/hosts
-      - run: sudo rm -rf tls-gen && mkdir -p certs
+      - run: sudo rm -rf tls-gen
+      - run: id && ls -l
       - uses: actions/checkout@v3
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
           cache: "npm"
+      - run: id && ls -l
       - name: Generate certificates
         run: git clone https://github.com/rabbitmq/tls-gen tls-gen && cd tls-gen/basic && make
         env:
           CN: test-node
       - name: Make sure certs are readable by rabbitmq
-        run: cp tls-gen/basic/result/* certs/ && sudo chown -R 999:999 certs
+        run: mkdir -p certs && cp tls-gen/basic/result/* certs/ && sudo chown -R 999:999 certs
       - run: docker exec $(docker ps --filter ancestor=rabbitmq:3.13-rc-management -q) ls -l /certs
       - name: Restart RabbitMQ
         run: docker restart $(docker ps --filter ancestor=rabbitmq:3.13-rc-management -q)
