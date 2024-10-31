@@ -72,7 +72,7 @@ jobs:
           docker exec test-node rabbitmqctl add_user 'O=client,CN=test-node' ''
           docker exec test-node rabbitmqctl clear_password 'O=client,CN=test-node'
           docker exec test-node rabbitmqctl set_permissions 'O=client,CN=test-node' '.*' '.*' '.*'
-      - run: npx mocha test -g auth
+      - run: npm test
         env:
           RABBITMQ_USER: "test-user"
           RABBITMQ_PASSWORD: "test-password"
