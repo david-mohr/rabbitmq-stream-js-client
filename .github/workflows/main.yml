@@ -28,7 +28,7 @@ jobs:
           # these directories will be empty until checkout, but they will be
           # populated by the time we restart the service
           - ${{ github.workspace }}/conf:/etc/rabbitmq
-          - ${{ github.workspace }}/tls-gen/basic/result:/certs
+          - ${{ github.workspace }}/certs:/certs
         ports:
           - 5552:5552
           - 5551:5551
@@ -51,11 +51,8 @@ jobs:
         run: git clone https://github.com/rabbitmq/tls-gen tls-gen && cd tls-gen/basic && make
         env:
           CN: test-node
-      - run: ls -lR tls-gen/basic/result
       - name: Make sure certs are readable by rabbitmq
-        run: sudo chown -R 999:999 tls-gen
-      - run: ls -lR tls-gen/basic/result
-      - run: docker exec $(docker ps --filter ancestor=rabbitmq:3.13-rc-management -q) ls -l /
+        run: cp tls-gen/basic/result/* certs/ && sudo chown -R 999:999 certs
       - run: docker exec $(docker ps --filter ancestor=rabbitmq:3.13-rc-management -q) ls -l /certs
       - name: Restart RabbitMQ
         run: docker restart $(docker ps --filter ancestor=rabbitmq:3.13-rc-management -q)
