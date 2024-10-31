@@ -56,6 +56,8 @@ jobs:
           CN: test-node
       - name: Make sure certs are readable by rabbitmq
         run: mv tls-gen/basic/result certs/ && sudo chown -R 999:999 certs
+      - run: mv certs/server_test-node_certificate.pem certs/server_rabbitmq_certificate.pem
+      - run: mv certs/server_test-node_key.pem certs/server_rabbitmq_key.pem
       - run: docker exec test-node ls -l /etc/rabbitmq
       - run: docker exec test-node ls -l /certs
       - name: Restart RabbitMQ
