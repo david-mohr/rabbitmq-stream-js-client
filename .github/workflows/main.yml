@@ -53,6 +53,7 @@ jobs:
           git clone https://github.com/rabbitmq/tls-gen tls-gen
           cd tls-gen/basic
           make
+          cd ../..
           cp -a tls-gen/basic/result certs/
           sudo chown -R 999:999 certs
           sudo mv certs/server_test-node_certificate.pem certs/server_rabbitmq_certificate.pem
@@ -67,9 +68,10 @@ jobs:
       - run: npm ci
       - run: npm run check
       - run: npm run build --if-present
-      - run: docker exec test-node rabbitmqctl add_user 'O=client,CN=test-node' ''
-      - run: docker exec test-node rabbitmqctl clear_password 'O=client,CN=test-node'
-      - run: docker exec test-node rabbitmqctl set_permissions 'O=client,CN=test-node' '.*' '.*' '.*'
+      - run: |
+          docker exec test-node rabbitmqctl add_user 'O=client,CN=test-node' ''
+          docker exec test-node rabbitmqctl clear_password 'O=client,CN=test-node'
+          docker exec test-node rabbitmqctl set_permissions 'O=client,CN=test-node' '.*' '.*' '.*'
       - run: npx mocha test -g auth
         env:
           RABBITMQ_USER: "test-user"
