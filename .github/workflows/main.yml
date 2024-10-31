@@ -47,22 +47,21 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: "npm"
       - name: Generate certificates
-        run: git clone https://github.com/rabbitmq/tls-gen tls-gen && cd tls-gen/basic && make
         env:
           CN: test-node
-      - name: Make sure certs are readable by rabbitmq
-        run: cp -a tls-gen/basic/result certs/ && sudo chown -R 999:999 certs
-      - run: sudo mv certs/server_test-node_certificate.pem certs/server_rabbitmq_certificate.pem
-      - run: sudo mv certs/server_test-node_key.pem certs/server_rabbitmq_key.pem
-      - run: docker exec test-node ls -l /etc/rabbitmq
-      - run: docker exec test-node ls -l /certs
+        run: |
+          git clone https://github.com/rabbitmq/tls-gen tls-gen
+          cd tls-gen/basic
+          make
+          cp -a tls-gen/basic/result certs/
+          sudo chown -R 999:999 certs
+          sudo mv certs/server_test-node_certificate.pem certs/server_rabbitmq_certificate.pem
+          sudo mv certs/server_test-node_key.pem certs/server_rabbitmq_key.pem
       - name: Restart RabbitMQ
-        run: docker restart test-node
-      - run: docker ps
-      - run: docker exec test-node ls -l /etc/rabbitmq
-      - run: docker exec test-node ls -l /certs
-      - name: Wait for rabbit instance restart
-        run: sleep 10 && docker exec test-node rabbitmqctl await_startup
+        run: |
+          docker restart test-node
+          sleep 2
+          docker exec test-node rabbitmqctl await_startup
       - name: Create SuperStream
         run: docker exec test-node rabbitmq-streams add_super_stream super-stream-test --partitions 2
       - run: npm ci
