@@ -201,7 +201,14 @@ export class Connection {
         })
         const { heartbeat } = await this.tune(this.params.heartbeat ?? 0)
         const connectionOpened = await this.open({ virtualHost: this.params.vhost })
-        if (!connectionOpened.ok) return rej(connectionOpened.error)
+        if (!connectionOpened.ok) {
+          try {
+            this.socket.destroy()
+          } catch (_e) {
+            /* socket may already be destroyed */
+          }
+          return rej(connectionOpened.error)
+        }
         if (!this.heartbeat.started) this.heartbeat.start(heartbeat)
         await this.exchangeCommandVersions()
         this.setupCompleted = true
