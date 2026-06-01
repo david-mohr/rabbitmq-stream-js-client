@@ -592,6 +592,9 @@ export class Connection {
     }
     const res = await this.sendAndWait<OpenResponse>(new OpenRequest(params))
     this.logger.debug(`Open response: ${res.ok} - '${inspect(res.properties)}'`)
+    if (!res.ok) {
+      return { ok: false, error: new Error(`Open failed with code 0x${res.code.toString(16)}`) }
+    }
     const advertisedHost = res.properties["advertised_host"] ?? ""
     const advertisedPort = parseInt(res.properties["advertised_port"] ?? "5552")
     this.serverEndpoint = { host: advertisedHost, port: advertisedPort }

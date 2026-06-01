@@ -11,6 +11,10 @@ export class OpenResponse extends AbstractResponse {
     super(response)
     this.verifyKey(OpenResponse)
 
+    if (this.response.payload.available() < 4) {
+      return
+    }
+
     const howMany = this.response.payload.readInt32()
     for (let index = 0; index < howMany; index++) {
       const resKey = this.response.payload.readString()
